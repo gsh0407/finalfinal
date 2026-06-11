@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>이미지 퀴즈</title>
+
+<style>
+body{
+    text-align:center;
+    font-family:Arial, sans-serif;
+}
+
+img{
+    width:1000px;
+    max-width:95%;
+    border:3px solid black;
+    cursor:pointer;
+}
+
+#result{
+    margin-top:20px;
+    font-size:40px;
+    font-weight:bold;
+}
+</style>
+
+</head>
+<body>
+
+<h1>정답 위치를 클릭하세요</h1>
+
+<img id="quizImage" src="photo.jpg">
+
+<div id="result"></div>
+
+<script>
+
+// 원본 사진 크기
+const ORIGINAL_WIDTH = 1536;
+const ORIGINAL_HEIGHT = 2048;
+
+// 정답 영역(② 원)
+const answerX = 755;
+const answerY = 855;
+
+// 정답 판정 반지름
+const radius = 120;
+
+const image = document.getElementById("quizImage");
+const result = document.getElementById("result");
+
+image.addEventListener("click", function(e){
+
+    const rect = image.getBoundingClientRect();
+
+    // 클릭 위치를 원본 사진 좌표계로 변환
+    const x =
+        (e.clientX - rect.left)
+        * (ORIGINAL_WIDTH / rect.width);
+
+    const y =
+        (e.clientY - rect.top)
+        * (ORIGINAL_HEIGHT / rect.height);
+
+    // 중심으로부터 거리 계산
+    const distance = Math.sqrt(
+        (x - answerX) * (x - answerX)
+        +
+        (y - answerY) * (y - answerY)
+    );
+
+    if(distance <= radius){
+        result.innerHTML = "⭕ 정답!";
+        result.style.color = "green";
+    }
+    else{
+        result.innerHTML = "❌ 오답!";
+        result.style.color = "red";
+    }
+
+});
+
+</script>
+
+</body>
+</html>
